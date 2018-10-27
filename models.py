@@ -1,3 +1,4 @@
+import sqlalchemy.exc
 from botFlask import db
 
 
@@ -46,3 +47,10 @@ class HistoryItem(db.Model):
     def __repr__(self):
         return "<HistoryItem(category={}, position={}, points={})>".format(
             self.category, self.position, self.points)
+
+
+try:
+    db.session.query(User).first()
+except sqlalchemy.exc.OperationalError:
+    db.create_all()
+

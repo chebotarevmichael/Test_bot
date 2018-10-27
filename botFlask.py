@@ -9,11 +9,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
 db = SQLAlchemy(app)
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello from Flask!'
-
-
 @app.route('/', methods=['POST'])
 def processing():
     data = json.loads(request.data)
@@ -41,6 +36,4 @@ def processing():
 
         return 'ok'
 
-
-db.create_all()
-
+if __name__ == "__main__": analyze.process(1,1)

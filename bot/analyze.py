@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-from botFlask import db
 from bot.survey import Survey
 from messageHandler import create_answer
-db.create_all()
 
 
 def process(user_id, points):
