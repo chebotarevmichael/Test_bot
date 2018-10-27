@@ -2,15 +2,17 @@ from flask import Flask, request, json
 from flask_sqlalchemy import SQLAlchemy
 
 import settings
-from bot.analyze import main
+from bot import analyze
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
 db = SQLAlchemy(app)
 
+
 @app.route('/')
 def hello_world():
     return 'Hello from Flask!'
+
 
 @app.route('/', methods=['POST'])
 def processing():
@@ -19,7 +21,7 @@ def processing():
         return 'not vk'
     if data['type'] == 'confirmation':
         return settings.confirmation_token
-    elif data['type'] == 'message_new':
+    if data['type'] == 'message_new':
         data = data['object']
         user_id = data['from_id']
         body = data['text']
@@ -30,8 +32,15 @@ def processing():
             "Скорее не согласен": -0.5,
             "Полностью не согласен": -1,
             "Назад": 0
-            }
-        main(user_id, body_to_ans.get(body), bool(body != "Назад"))
+        }
+
+        if body == "Назад":
+            analyze.go_back(user_id)
+        else:
+            analyze.process(user_id, body_to_ans[body])
+
         return 'ok'
 
+
 db.create_all()
+
