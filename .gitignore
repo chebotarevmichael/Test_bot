@@ -112,3 +112,20 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Vim swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+# Vim session
+Session.vim
+# Vim temporary
+.netrwhist
+*~
+# Vim auto-generated tag files
+tags
+# Vim persistent undo
+[._]*.un~
+
