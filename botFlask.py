@@ -1,12 +1,12 @@
 from flask import Flask, request, json
 from flask_sqlalchemy import SQLAlchemy
 
-import settings
-from bot import analyze
-
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
 db = SQLAlchemy(app)
+
+import settings
+from bot import analyze
 
 
 @app.route('/', methods=['POST'])
