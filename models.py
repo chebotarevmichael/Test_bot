@@ -5,7 +5,7 @@ from botFlask import db
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    position = db.Column(db.SmallInteger, default=0)
+    position = db.Column(db.SmallInteger, default=-1)
     category_index = db.Column(db.SmallInteger, default=0)
 
     categories = db.relationship("Category", back_populates="user")
@@ -14,7 +14,7 @@ class User(db.Model):
         super().__init__(id=user_id, **kwargs)
 
     def __repr__(self):
-        return "<User(id={}, categores={}, C{}Q{}>".format(
+        return "<User(id={}, categores={}, C{}Q{})>".format(
             self.id, self.categories, self.category_index, self.position)
 
 
@@ -31,8 +31,8 @@ class Category(db.Model):
     history = db.relationship("HistoryItem", back_populates="category")
 
     def __repr__(self):
-        return "<Category(user_id={}, index={}, name={}, points={})>".format(
-            self.user_id, self.index, self.name, self.points)
+        return "<Category(index={}, name='{}', points={})>".format(
+            self.index, self.name, self.points)
 
 
 class HistoryItem(db.Model):
