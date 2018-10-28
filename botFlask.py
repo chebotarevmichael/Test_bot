@@ -20,20 +20,14 @@ def processing():
         data = data['object']
         user_id = data['from_id']
         body = data['text']
-        body_to_ans = {
-            "Полностью согласен": 1,
-            "Скорее согласен": 0.5,
-            "Не знаю | Смешанно": 0,
-            "Скорее не согласен": -0.5,
-            "Полностью не согласен": -1,
-            "Назад": 0
-        }
 
-        if body == "Назад":
+        points = settings.body_to_ans.get(body)
+        if body == settings.back_label:
             analyze.go_back(user_id)
+        elif points is not None:
+            analyze.process(user_id, points)
         else:
-            analyze.process(user_id, body_to_ans[body])
+            analyze.touch(user_id)
 
         return 'ok'
 
-if __name__ == "__main__": analyze.process(1,1)
