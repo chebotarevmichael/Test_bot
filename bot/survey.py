@@ -5,9 +5,13 @@ import os.path as path
 from models import db, User, Category, HistoryItem
 import settings
 
-quest_text = [[line.strip()
-               for line in open(path.join(settings.path, name+".txt"))]
-              for name in settings.categories]
+quest_text = []
+q = []
+for name in settings.categories:
+    with open(path.join(settings.path, name+".txt"), 'r') as textfile:
+        for line in textfile:
+            q.append(line.strip())
+    quest_text.append(q)
 
 
 class EndOfTest(Exception):
