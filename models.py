@@ -28,25 +28,9 @@ class Category(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = db.relationship("User", back_populates="categories", uselist=False)
 
-    history = db.relationship("HistoryItem", back_populates="category")
-
     def __repr__(self):
         return "<Category(index={}, name='{}', points={})>".format(
             self.index, self.name, self.points)
-
-
-class HistoryItem(db.Model):
-    __tablename__ = "history"
-    id = db.Column(db.Integer, primary_key=True)
-    position = db.Column(db.SmallInteger)
-    points = db.Column(db.Float)
-
-    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"))
-    category = db.relationship("Category", back_populates="history", uselist=False)
-
-    def __repr__(self):
-        return "<HistoryItem(category={}, position={}, points={})>".format(
-            self.category, self.position, self.points)
 
 
 try:

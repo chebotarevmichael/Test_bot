@@ -2,7 +2,7 @@
 
 import os.path as path
 
-from models import db, User, Category, HistoryItem
+from models import db, User, Category
 import settings
 
 quest_text = []
@@ -32,8 +32,6 @@ class Survey:
 
     def cleanup(self):
         for c in self.user.categories:
-            for h in c.history:
-                db.session.delete(h)
             db.session.delete(c)
         db.session.delete(self.user)
         db.session.commit()
@@ -55,14 +53,6 @@ class Survey:
             db.session.commit()
         return category
 
-    def history_item(self) -> HistoryItem:
-        "History is used to get points for given category and position"
-        item = db.session.query(HistoryItem).\
-                          filter(HistoryItem.category==self.category()).\
-                          filter(HistoryItem.position==self.user.position).\
-                          first()
-        return item
-
     def change_points(self, value):
         self.category().points += value
         db.session.commit()
@@ -79,27 +69,7 @@ class Survey:
             self.user.position += step
         db.session.commit()
 
-        if backward:
-            self.restore_points()  # rollback to the state the user went to
-        else:
-            self.log_to_history()  # save answer to the previous question
-
         return category[self.user.position]
-
-    def restore_points(self):
-        item = self.history_item()
-        category = self.category()
-        if item.points is not None:
-            category.points = item.points
-
-    def log_to_history(self):
-        item = self.history_item()
-        category = self.category()
-        if item is None:
-            item = HistoryItem(category=category, position=self.user.position)
-            db.session.add(item)
-        item.points = category.points
-        db.session.commit()
 
     def step_category(self, backward=False):
         if self.user.category_index == len(quest_text)-1 and not backward:
