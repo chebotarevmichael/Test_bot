@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from bot.survey import Survey, EndOfTest
 from messageHandler import create_answer
+import settings
 
 
 def touch(user_id, send=True):
@@ -14,12 +15,14 @@ def process(user_id, points=0, send=True):
     survey = Survey(user_id)
     survey.change_points(points)
     try:
-        text = survey.step_question()
+        text = survey.step_question()                   # next question
+        attachment = ''
     except EndOfTest:
         text = str(survey.results())  # TODO: nice results
+        attachment = 'photo{}_{}'.format(settings.group_id, settings.photo_id)
         survey.cleanup()
     if send:
-        create_answer(user_id, text)
+        create_answer(user_id, text, attachment)
     return text, survey.user
 
 

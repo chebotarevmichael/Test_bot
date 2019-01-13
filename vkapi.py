@@ -18,19 +18,22 @@ def button(label, color, payload=""):
 keyboard = {
     "one_time": False,
     "buttons": [
-
-    [button(label="Полностью согласен", color="positive")],
-    [button(label="Скорее согласен", color="positive")],
-    [button(label="Не знаю | Смешанно", color="primary")],
-    [button(label="Скорее не согласен", color="negative")],
-    [button(label="Полностью не согласен", color="negative")],
-    [button(label="Назад", color="primary")]
-
+        [button(label="Полностью согласен", color="positive")],
+        [button(label="Скорее согласен", color="positive")],
+        [button(label="Не знаю | Смешанно", color="primary")],
+        [button(label="Скорее не согласен", color="negative")],
+        [button(label="Полностью не согласен", color="negative")],
+        [button(label="Назад", color="primary")]
     ]
 }
 
 keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
 keyboard = str(keyboard.decode('utf-8'))
 
-def send_message(user_id, token, message):
-    api.messages.send(access_token=token, user_id=str(user_id), message=message, attachment="", keyboard = keyboard)
+
+def send_message(user_id, token, message, attachment):
+    api.messages.send(access_token=token,
+                      user_id=str(user_id),
+                      message=message,
+                      attachment=attachment,
+                      keyboard=keyboard)

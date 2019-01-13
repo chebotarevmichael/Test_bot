@@ -129,3 +129,7 @@ tags
 # Vim persistent undo
 [._]*.un~
 
+venv
+__pycache__
+.idea
+

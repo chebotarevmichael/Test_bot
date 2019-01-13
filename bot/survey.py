@@ -12,6 +12,7 @@ for name in settings.categories:
         for line in textfile:
             q.append(line.strip())
     quest_text.append(q)
+    q = []
 
 
 class EndOfTest(Exception):
@@ -42,8 +43,8 @@ class Survey:
 
     def category(self) -> Category:
         category = db.session.query(Category).\
-                              filter(Category.user==self.user).\
-                              filter(Category.index==self.user.category_index).\
+                              filter(Category.user == self.user).\
+                              filter(Category.index == self.user.category_index).\
                               first()
 
         if category is None:
@@ -67,9 +68,9 @@ class Survey:
         db.session.commit()
 
     def step_question(self, backward=False):
-        "Raises EndOfTest if there is no more questions"
-        category = quest_text[self.category().index]
-        step = -1 if backward else 1
+        """Raises EndOfTest if there is no more questions"""
+        category = quest_text[self.category().index]            # get list of questions for user`s current category
+        step = -1 if backward else 1                            # step to forward or backward
 
         if (self.user.position+step == len(category)
                 or self.user.position+step < 0):
