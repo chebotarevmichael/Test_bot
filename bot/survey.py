@@ -5,15 +5,6 @@ import os.path as path
 from models import db, User, Category
 import settings
 
-quest_text = []
-q = []
-for name in settings.categories:
-    with open(path.join(settings.path, name+".txt"), 'r') as textfile:
-        for line in textfile:
-            q.append(line.strip())
-    quest_text.append(q)
-    q = []
-
 
 class EndOfTest(Exception):
     pass
@@ -54,17 +45,18 @@ class Survey:
         return category
 
     def change_points(self, value):
-        self.category().points += value
+        self.category().points_history[self.user.category_index][self.user.position] = value
+        self.category().points = sum(self.category().points_history[self.user.category_index])
         db.session.commit()
 
     def step_question(self, backward=False):
         """Raises EndOfTest if there is no more questions"""
-        category = quest_text[self.category().index]            # get list of questions for user`s current category
+        category = settings.quest_text[self.category().index]            # get list of questions for user`s current category
         step = -1 if backward else 1                            # step to forward or backward
 
         if (self.user.position+step == len(category)
                 or self.user.position+step < 0):
-            category = quest_text[self.step_category(backward).index]
+            category = settings.quest_text[self.step_category(backward).index]
         else:
             self.user.position += step
         db.session.commit()
@@ -72,13 +64,13 @@ class Survey:
         return category[self.user.position]
 
     def step_category(self, backward=False):
-        if self.user.category_index == len(quest_text)-1 and not backward:
+        if self.user.category_index == len(settings.quest_text)-1 and not backward:
             raise EndOfTest
         if self.user.category_index == 0 and backward:
             return self.category()
 
         self.user.category_index += -1 if backward else 1
-        quest_num = len(quest_text[self.user.category_index])
+        quest_num = len(settings.quest_text[self.user.category_index])
         self.user.position = quest_num-1 if backward else 0
         db.session.commit()
         return self.category()

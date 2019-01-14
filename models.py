@@ -1,5 +1,6 @@
 import sqlalchemy.exc
 from botFlask import db
+import settings
 
 
 class User(db.Model):
@@ -24,6 +25,7 @@ class Category(db.Model):
     index = db.Column(db.SmallInteger)
     name = db.Column(db.String, nullable=False)
     points = db.Column(db.Float, default=0)
+    points_history = [list(range(len(settings.quest_text[x]))) for x in range(len(settings.quest_text))]
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = db.relationship("User", back_populates="categories", uselist=False)
