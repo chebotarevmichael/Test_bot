@@ -18,8 +18,8 @@ def processing():
         return settings.confirmation_token
     if data['type'] == 'message_new':
         data = data['object']
-        user_id = data['from_id']
-        body = data['text']
+        user_id = data['user_id']
+        body = data['body']
 
         points = settings.body_to_ans.get(body)
         if body == settings.back_label:

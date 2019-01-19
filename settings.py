@@ -7,24 +7,34 @@ token = None
 confirmation_token = None
 
 # Location of categoryname.txt files containing questions
-path = "mysite/bot/question"
+path_fonts = "mysite/bot/fonts"
+path_images = "mysite/bot/images"
+path_question = "mysite/bot/question"
 
 # VK group and Photo id
 group_id = -176434873                   # negative number
 photo_id = 456239017
 
-categories = ["economic", "social", "national",
-              "traditional", "revolution", "ecological",
-              "individualism", "scientism"]
+categories = {
+    "economic": [True, 0, 0],           # True/False - to be inversed or not to be
+    "social": [False, 0, 1],            # 0 - number of questions in category (i will be inited below)
+    "national": [True, 0, 2],           # 0,1,2,...7 - id of categories, therefore map has not indexes
+    "central": [False, 0, 3],
+    "revolution": [True, 0, 4],
+    "ecological": [False, 0, 5],
+    "individualism": [True, 0, 6],
+    "scientism": [False, 0, 7]
+}
 
 # init list of questions
 quest_text = []
 q = []
-for name in categories:
-    with open(os_path.join(path, name + ".txt"), 'r') as textfile:
+for name in categories.keys():
+    with open(os_path.join(path_question, name + ".txt"), 'r', encoding='utf-8') as textfile:
         for line in textfile:
             q.append(line.strip())
     quest_text.append(q)
+    categories[name][1] = len(q)
     q = []
 
 

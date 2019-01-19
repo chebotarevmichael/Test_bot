@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-
-import os.path as path
-
 from models import db, User, Category
 import settings
 
@@ -38,8 +35,14 @@ class Survey:
 
         if category is None:
             index = self.user.category_index
+            cat_name = ""
+            for k in settings.categories.keys():
+                if settings.categories[k][2] == index:
+                    cat_name = k
+                    break
+
             category = Category(user=self.user, index=index,
-                                name=settings.categories[index])
+                                name=cat_name)
             db.session.add(category)
             db.session.commit()
         return category
