@@ -43,8 +43,8 @@ def go_back(user_id, send=True):
 
 def go_to_start(user_id, send=True):
     survey = Survey(user_id)
-    survey.user.position = 0
-    survey.user.category_index = 0
+    survey.user.position = -1                   # position automatically increment after step_question
+    survey.user.category_index = 0              # add we get the 1st question
     question = survey.step_question()
     if send:
         create_answer(user_id, question)
