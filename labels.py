@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 labels = [
     # "Национал-синдикализм" - name of category
-    # (20, 40)               - left and right edges for economic
-    # (0, 20)                - left and right edges for social
-    # (80-100)               - left and right edges for national
+    # (20, 40)               - left and right edges for economic (капитал)
+    # (0, 20)                - left and right edges for social (антиавторитаризм)
+    # (80-100)               - left and right edges for national (национализм)
     # None                   - national is not used
     ["Анархо-капитализм", (90, 100), (90, 100), None],
     ["Агоризм", (60, 90), (90, 100), None], 

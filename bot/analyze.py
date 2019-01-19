@@ -40,3 +40,12 @@ def go_back(user_id, send=True):
         create_answer(user_id, question)
     return question, survey.user
 
+
+def go_to_start(user_id, send=True):
+    survey = Survey(user_id)
+    survey.user.position = 0
+    survey.user.category_index = 0
+    question = survey.step_question()
+    if send:
+        create_answer(user_id, question)
+    return question, survey.user

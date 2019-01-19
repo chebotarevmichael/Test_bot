@@ -25,7 +25,7 @@ keyboard = {
         [button(label="Не знаю | Смешанно", color="primary")],
         [button(label="Скорее не согласен", color="negative")],
         [button(label="Полностью не согласен", color="negative")],
-        [button(label="Назад", color="primary")]
+        [button(label="Назад", color="primary"), button(label="Сначала", color="default")]
     ]
 }
 

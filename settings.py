@@ -16,14 +16,14 @@ group_id = -176434873                   # negative number
 photo_id = 456239017
 
 categories = {
-    "economic": [True, 0, 0],           # True/False - to be inversed or not to be
-    "social": [False, 0, 1],            # 0 - number of questions in category (i will be inited below)
-    "national": [True, 0, 2],           # 0,1,2,...7 - id of categories, therefore map has not indexes
-    "central": [False, 0, 3],
-    "revolution": [True, 0, 4],
-    "ecological": [False, 0, 5],
-    "individualism": [True, 0, 6],
-    "scientism": [False, 0, 7]
+    "economic": [True, 0, 0, "Экономика"],           # True/False - to be inversed or not to be
+    "social": [False, 0, 1, "Социальная сфера"],     # 0 - number of questions in category (i will be inited below)
+    "national": [True, 0, 2, "Национализм"],         # 0,1,2,...7 - id of categories, therefore map has not indexes
+    "central": [False, 0, 3, "Централизация"],       # "Экономика" - name which user will see
+    "revolution": [True, 0, 4, "Революционность"],
+    "ecological": [False, 0, 5, "Экология"],
+    "individualism": [True, 0, 6, "Индивидуализм"],
+    "scientism": [False, 0, 7, "Сциентизм"]
 }
 
 # init list of questions
@@ -33,6 +33,7 @@ for name in categories.keys():
     with open(os_path.join(path_question, name + ".txt"), 'r', encoding='utf-8') as textfile:
         for line in textfile:
             q.append(line.strip())
+
     quest_text.append(q)
     categories[name][1] = len(q)
     q = []
@@ -48,3 +49,4 @@ body_to_ans = {
 }
 
 back_label = "Назад"
+restart_label = "Сначала"

@@ -54,8 +54,9 @@ class Survey:
 
     def step_question(self, backward=False):
         """Raises EndOfTest if there is no more questions"""
-        category = settings.quest_text[self.category().index]            # get list of questions for user`s current category
-        step = -1 if backward else 1                            # step to forward or backward
+        question = ''
+        category = settings.quest_text[self.category().index]       # get list of questions for user`s current category
+        step = -1 if backward else 1                                # step to forward or backward
 
         if (self.user.position+step == len(category)
                 or self.user.position+step < 0):
@@ -64,7 +65,14 @@ class Survey:
             self.user.position += step
         db.session.commit()
 
-        return category[self.user.position]
+        if self.user.position == 0:
+            question = "#{}\n" \
+                       "Количество вопросов: {} шт\n" \
+                       "\n".format(settings.categories[self.category().name][3].replace(' ', '_'), # user-friendly name
+                                   settings.categories[self.category().name][1])
+
+        question += category[self.user.position]
+        return question
 
     def step_category(self, backward=False):
         if self.user.category_index == len(settings.quest_text)-1 and not backward:

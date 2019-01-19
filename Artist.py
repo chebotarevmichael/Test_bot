@@ -42,7 +42,10 @@ class Artist:
     def __del__(self):
         # remove file
         if self._user_id is not None:
-            os.remove(self._TEMPLATE_PATH_FOR_RESULT_IMG.format(settings.path_images, self._user_id))
+            try:
+                os.remove(self._TEMPLATE_PATH_FOR_RESULT_IMG.format(settings.path_images, self._user_id))
+            except FileNotFoundError:
+                print("Exception. os.remove. File not found")
             self._user_id = None
 
     # get path to image
@@ -64,8 +67,13 @@ class Artist:
             amount_of_questions = settings.categories[k][1]
             cur_category_result = dict_of_points[k]
             dict_of_results[k] = round((100 * abs(cur_category_result)) / amount_of_questions)
+
             # compute left from right percent
             if settings.categories[k][0] and cur_category_result > 0:
+                dict_of_results[k] = 100 - dict_of_results[k]
+
+            # compute left from right percent
+            if not settings.categories[k][0] and cur_category_result < 0:
                 dict_of_results[k] = 100 - dict_of_results[k]
 
         # compute label
@@ -75,7 +83,7 @@ class Artist:
                 continue
 
             # check edges of social category
-            if (100 - dict_of_results[a]) < i[2][0] or (100 - dict_of_results[a]) > i[2][1]:
+            if dict_of_results[a] < i[2][0] or dict_of_results[a] > i[2][1]:
                 continue
 
             # check edges of national category
@@ -171,7 +179,7 @@ class Artist:
         _indic = _INDICATORS[indicator_name]
 
         # validate extreme values
-        percent_left = abs(percent_left) % 100
+        percent_left = abs(percent_left) % 101
         percent_right = 100 - percent_left
 
         # rectangles & their size
