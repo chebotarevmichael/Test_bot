@@ -66,7 +66,7 @@ class Artist:
         for k in dict_of_points.keys():
             amount_of_questions = settings.categories[k][1]
             cur_category_result = dict_of_points[k]
-            dict_of_results[k] = round((100 * abs(cur_category_result)) / amount_of_questions)
+            dict_of_results[k] = 50 + round((50 * abs(cur_category_result)) / amount_of_questions)
 
             # compute left from right percent
             if settings.categories[k][0] and cur_category_result > 0:

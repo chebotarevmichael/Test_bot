@@ -11,10 +11,16 @@ path_fonts = "mysite/bot/fonts"
 path_images = "mysite/bot/images"
 path_question = "mysite/bot/question"
 
-# VK group and Photo id
-group_id = -176434873                   # negative number
-photo_id = 456239017
+# Buttons name
+btn_absolutely_yes = "Полностью согласен"
+btn_probably_yes = "Скорее согласен"
+btn_idk = "Не знаю | Смешанно"                      # idk = i don`t know
+btn_probably_no = "Скорее не согласен"
+btn_absolutely_no = "Полностью не согласен"
+btn_back = "Назад"
+btn_restart = "Сначала"
 
+# Categories
 categories = {
     "economic": [True, 0, 0, "Экономика"],           # True/False - to be inversed or not to be
     "social": [False, 0, 1, "Социальная сфера"],     # 0 - number of questions in category (i will be inited below)
@@ -26,7 +32,7 @@ categories = {
     "scientism": [False, 0, 7, "Сциентизм"]
 }
 
-# init list of questions
+# Init list of questions
 quest_text = []
 q = []
 for name in categories.keys():
@@ -38,15 +44,11 @@ for name in categories.keys():
     categories[name][1] = len(q)
     q = []
 
-
 # Points user gets choosing answer on bot keyboard
 body_to_ans = {
-    "Полностью согласен": 1,
-    "Скорее согласен": 0.5,
-    "Не знаю | Смешанно": 0,
-    "Скорее не согласен": -0.5,
-    "Полностью не согласен": -1,
+    btn_absolutely_yes: 1,
+    btn_probably_yes: 0.5,
+    btn_idk: 0,
+    btn_probably_no: -0.5,
+    btn_absolutely_no: -1,
 }
-
-back_label = "Назад"
-restart_label = "Сначала"

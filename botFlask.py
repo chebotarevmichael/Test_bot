@@ -22,9 +22,9 @@ def processing():
         body = data['body']
 
         points = settings.body_to_ans.get(body)
-        if body == settings.back_label:
+        if body == settings.btn_back:
             analyze.go_back(user_id)
-        elif body == settings.restart_label:
+        elif body == settings.btn_restart:
             analyze.go_to_start(user_id)
         elif points is not None:
             analyze.process(user_id, points)
