@@ -20,6 +20,15 @@ btn_absolutely_no = "Полностью не согласен"
 btn_back = "Назад"
 btn_restart = "Сначала"
 
+# Commands name
+cmd_absolutely_yes = '5'
+cmd_probably_yes = '4'
+cmd_idk = '3'                                         # idk = i don`t know
+cmd_probably_no = '2'
+cmd_absolutely_no = '1'
+cmd_back = '-1'
+cmd_restart = '123'
+
 # Categories
 categories = {
     "economic": [True, 0, 0, "Экономика"],           # True/False - to be inversed or not to be
@@ -44,11 +53,21 @@ for name in categories.keys():
     categories[name][1] = len(q)
     q = []
 
-# Points user gets choosing answer on bot keyboard
-body_to_ans = {
-    btn_absolutely_yes: 1,
-    btn_probably_yes: 0.5,
-    btn_idk: 0,
-    btn_probably_no: -0.5,
-    btn_absolutely_no: -1,
-}
+
+# Convert user`s message to points. User can send messages with help buttons and commands
+def msg_to_points(msg_from_user):
+    return {
+        # buttons
+        btn_absolutely_yes: 1,
+        btn_probably_yes: 0.5,
+        btn_idk: 0,
+        btn_probably_no: -0.5,
+        btn_absolutely_no: -1,
+        # commands
+        cmd_absolutely_yes: 1,
+        cmd_probably_yes: 0.5,
+        cmd_idk: 0,
+        cmd_probably_no: -0.5,
+        cmd_absolutely_no: -1
+    }.get(msg_from_user)
+

@@ -1,10 +1,11 @@
 import vk
+import vk.exceptions
 import requests
 import json
 import settings
 
 session = vk.Session(access_token=settings.token)
-api = vk.API(session, v=5.80)
+api = vk.API(session, v=5.90)
 
 
 def button(label, color, payload=""):
@@ -16,6 +17,7 @@ def button(label, color, payload=""):
         },
         "color": color
     }
+
 
 keyboard = {
     "one_time": False,
@@ -31,7 +33,6 @@ keyboard = {
 }
 
 keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-keyboard = str(keyboard.decode('utf-8'))
 
 
 def send_message(user_id, token, message, path_to_img):
@@ -46,9 +47,11 @@ def send_message(user_id, token, message, path_to_img):
         # compute attachment id
         attachment = 'photo{}_{}'.format(r['owner_id'], r['id'])
 
-    api.messages.send(access_token=token,
-                      user_id=str(user_id),
-                      message=message,
-                      attachment=attachment,
-                      keyboard=keyboard)
-
+    try:
+        api.messages.send(access_token=token,
+                          user_id=str(user_id),
+                          message=message,
+                          attachment=attachment,
+                          keyboard=keyboard)
+    except vk.exceptions.VkAPIError:                            # 9. Flood control: too much messages sent to user.
+        return                                                  # bot can not send >100 msg/hour to 1 user

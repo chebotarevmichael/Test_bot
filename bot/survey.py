@@ -12,6 +12,8 @@ class Survey:
         # get corresponding user or create it
         self.user = db.session.query(User).get(user_id)
         self.newborn = False
+        self.last_timestamp = -1
+
         if self.user is None:
             self.newborn = True
             self.user = User(user_id)
@@ -66,10 +68,23 @@ class Survey:
         db.session.commit()
 
         if self.user.position == 0:
-            question = "#{}\n" \
-                       "Количество вопросов: {} шт\n" \
-                       "\n".format(settings.categories[self.category().name][3].replace(' ', '_'), # user-friendly name
-                                   settings.categories[self.category().name][1])
+            # add instruction for users
+            if self.category().index == 0:
+                question += "Для прохождения теста используйте кнопки или команды-числа:\n" \
+                           "\n" \
+                           "{:>3} - {}".format(settings.cmd_absolutely_yes, settings.btn_absolutely_yes) + "\n" \
+                           "{:>3} - {}".format(settings.cmd_probably_yes, settings.btn_probably_yes) + "\n" \
+                           "{:>3} - {}".format(settings.cmd_idk, settings.btn_idk) + "\n" \
+                           "{:>3} - {}".format(settings.cmd_probably_no, settings.btn_probably_no) + "\n" \
+                           "{:>3} - {}".format(settings.cmd_absolutely_no, settings.btn_absolutely_no) + "\n" \
+                           "{:>3} - {}".format(settings.cmd_restart, settings.btn_restart) + "\n" \
+                           "{:>3} - {}".format(settings.cmd_back, settings.btn_back) + "\n" \
+                           "\n"
+            # add user-friendly headers for each category (only in firsts questions)
+            question += "#{}\n" \
+                        "Количество вопросов: {} шт\n" \
+                        "\n".format(settings.categories[self.category().name][3].replace(' ', '_'),
+                                    settings.categories[self.category().name][1])
 
         question += category[self.user.position]
         return question

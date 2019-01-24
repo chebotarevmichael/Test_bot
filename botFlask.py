@@ -18,13 +18,18 @@ def processing():
         return settings.confirmation_token
     if data['type'] == 'message_new':
         data = data['object']
-        user_id = data['user_id']
-        body = data['body']
+        user_id = data['from_id']
+        msg_from_user = data['text']
+        timestamp = data['date']
 
-        points = settings.body_to_ans.get(body)
-        if body == settings.btn_back:
+        # we ignoring vk server repeated messages
+        if not analyze.is_valid_timestamp(user_id, timestamp):
+            return 'ok'
+
+        points = settings.msg_to_points(msg_from_user)
+        if msg_from_user == settings.btn_back or msg_from_user == settings.cmd_back:
             analyze.go_back(user_id)
-        elif body == settings.btn_restart:
+        elif msg_from_user == settings.btn_restart or msg_from_user == settings.cmd_restart:
             analyze.go_to_start(user_id)
         elif points is not None:
             analyze.process(user_id, points)

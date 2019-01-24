@@ -17,12 +17,12 @@ def process(user_id, points=0, send=True):
     survey = Survey(user_id)
     survey.change_points(points)
     try:
-        text = survey.step_question()                   # next question
+        text = survey.step_question()                       # next question
         path_to_img = ''
     except EndOfTest:
         create_answer(user_id, "Результат обрабатывается... ждите.")
         text = ""
-        artist = Artist(user_id, survey.results())           # wait 4 seconds, hard computing
+        artist = Artist(user_id, survey.results())          # wait 4 seconds, hard computing
         path_to_img = artist.get_path_to_img()
         survey.cleanup()
 
@@ -43,9 +43,21 @@ def go_back(user_id, send=True):
 
 def go_to_start(user_id, send=True):
     survey = Survey(user_id)
-    survey.user.position = -1                   # position automatically increment after step_question
-    survey.user.category_index = 0              # add we get the 1st question
+    survey.user.position = -1                               # position automatically increment after step_question
+    survey.user.category_index = 0                          # add we get the 1st question
     question = survey.step_question()
     if send:
         create_answer(user_id, question)
     return question, survey.user
+
+
+# check timestamp of last message, and return False
+# if current message is double
+def is_valid_timestamp(user_id, cur_timestamp: int):
+    survey = Survey(user_id)
+
+    if survey.last_timestamp > cur_timestamp:
+        return False
+
+    survey.last_timestamp = cur_timestamp
+    return True
